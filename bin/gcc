@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Override the C and C++ standard levels to prevent the bootstrap compilation
+# failing in newer versions of GCC. Also disable a bunch of warnings by default.
+# C99
+#exec /usr/bin/gcc -std=c99 \
+#-Wno-implicit-fallthrough \
+#-Wno-implicit-function-declaration \
+#-Wno-int-conversion \
+#-Wno-stringop-truncation \
+#"$@"
+
+# C11 with GNU extensions
+exec /usr/bin/gcc -std=gnu11 \
+"$@"

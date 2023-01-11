@@ -1,0 +1,7 @@
+*
+!bin
+!gcc
+
+**/.DS_Store
+**/.git
+**/Thumbs.db

@@ -1,0 +1,22 @@
+services:
+
+  gcj:
+    image: &gcj-image "yogarine/gcj"
+    build:
+      context:    .
+      args:       { BUILDKIT_INLINE_CACHE: '1' }
+      cache_from: [ *gcj-image ]
+      x-bake:
+        platforms:
+          - linux/amd64
+          - linux/arm64
+
+  dev:
+    image: yogarine/gcj-dev
+    build:
+      context:    .
+      cache_from: [ *gcj-image ]
+      target:     dev
+    volumes:
+      - { type: bind, source: ./gcc,   target: /opt/gcc   }
+    profiles: [ dev ]

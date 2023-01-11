@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -e
+
+export BUILDKIT_PROGRESS='plain'
+export DOCKER_BUILDKIT=1
+export DOCKER_TAG="${DOCKER_TAG-latest}"
+export DOCKERFILE_PATH="${DOCKERFILE_PATH:-.}"
+unset  DOCKER_DEFAULT_PLATFORM
+
+export IMAGE_NAME="${IMAGE_NAME:-yogarine/gcj:${DOCKER_TAG}}"
+
+# Use Ubuntu 22.04 "Jammy Jellyfish"
+export UBUNTU_DISTRIB_CODENAME='jammy'
+
+echo ""
+
+echo "[hooks/build] [pull] Ensuring Ubuntu base image is up-to-date:"
+echo "[hooks/build] [pull] Running \`docker pull \"ubuntu:${UBUNTU_DISTRIB_CODENAME}\"\`..."
+docker pull "ubuntu:${UBUNTU_DISTRIB_CODENAME}"
+echo "[hooks/build] [pull] DONE."
+
+echo ""
+
+echo "[hooks/build] [amd64] Building AMD64 image:"
+docker build \
+  --build-arg "DISTRIB_CODENAME=${UBUNTU_DISTRIB_CODENAME}" \
+  --file      "${DOCKERFILE_PATH}" \
+  --progress  'plain' \
+  --platform  'linux/amd64' \
+  --tag       "${IMAGE_NAME}-amd64" \
+  .
+echo "[hooks/build] [amd64] DONE."
+
+echo "[hooks/build] [arm64] Building ARM64 image:"
+docker build \
+  --build-arg "DISTRIB_CODENAME=${UBUNTU_DISTRIB_CODENAME}" \
+  --file      "${DOCKERFILE_PATH}" \
+  --progress  'plain' \
+  --platform  'linux/arm64' \
+  --tag       "${IMAGE_NAME}-arm64" \
+  .
+echo "[hooks/build] [arm64] DONE."

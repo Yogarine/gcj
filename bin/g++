@@ -1,0 +1,44 @@
+#!/bin/sh
+
+# This script wraps the g++ executable and overrides the C++ standard levels to
+# prevent the GCC bootstrap compilation failing with newer versions of GCC.
+# It also disables a bunch of expected warnings by default.
+
+# ANSI C++
+#exec /usr/bin/g++ -ansi \
+#-Wno-c++11-compat \
+#-Wno-cast-function-type \
+#-Wno-class-memaccess \
+#-Wno-dangling-else \
+#-Wno-deprecated \
+#-Wno-expansion-to-defined \
+#-Wno-format-security \
+#-Wno-ignored-qualifiers \
+#-Wno-implicit-fallthrough \
+#-Wno-int-in-bool-context \
+#-Wno-memset-elt-size \
+#-Wno-multistatement-macros \
+#-Wno-misleading-indentation \
+#-Wno-sequence-point \
+#-Wno-switch \
+#-Wno-uninitialized \
+#"$@"
+
+# C++11
+#exec /usr/bin/g++ -std=c++11 \
+#"$@"
+
+# C++14 with GNU extensions
+exec /usr/bin/g++ -std=gnu++14 \
+"$@"
+#-Wno-cast-function-type \
+#-Wno-expansion-to-defined \
+#-Wno-format-security \
+#-Wno-ignored-qualifiers \
+#-Wno-implicit-fallthrough \
+#-Wno-literal-suffix \
+#-Wno-shift-negative-value \
+#-Wno-switch \
+
+# Vanilla
+#exec /usr/bin/g++ "$@"
